@@ -7,9 +7,13 @@ const port = 4000;
 const app = express();
 
 app.get("/", async (req, res) => {
+  // getting current date and time
   const timestamp = new Date();
+
   const myTargetFolder = "Data";
+
   let data = date.format(timestamp, "DD/MM/YYYY HH:mm:ss");
+  // Checking whether folder is already exists if not creating it
   if (!fs.existsSync(myTargetFolder)) {
     fs.mkdir(`./${myTargetFolder}`, (err) => {
       if (err) {
@@ -17,6 +21,7 @@ app.get("/", async (req, res) => {
       }
     });
   }
+  // Updating the current file and creating if not exists at current path
   fs.writeFile(`./${myTargetFolder}/date-time.txt`, data, (err) => {
     if (err) {
       throw err;
