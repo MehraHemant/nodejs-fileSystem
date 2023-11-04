@@ -6,29 +6,28 @@ const port = 4000;
 
 const app = express();
 
-app.get("/", async (req, res) => {
-  // getting current date and time
-  const timestamp = new Date();
+//middlewares
+app.use(express.json());
 
-  const myTargetFolder = "Data";
+app.get("/timestamp", (req, res) => {
+  let time = new Date();
+  let dateString = time;
+  const content = `Last created timestamp ${dateString}`;
 
-  let data = date.format(timestamp, "DD/MM/YYYY HH:mm:ss");
-  // Checking whether folder is already exists if not creating it
-  if (!fs.existsSync(myTargetFolder)) {
-    fs.mkdir(`./${myTargetFolder}`, (err) => {
-      if (err) {
-        return console.error(err);
-      }
-    });
-  }
-  // Updating the current file and creating if not exists at current path
-  fs.writeFile(`./${myTargetFolder}/date-time.txt`, data, (err) => {
+  fs.writeFileSync("date-time.txt", content, (err) => {
     if (err) {
-      throw err;
+      console.log(err);
+    } else {
+      console.log("file created sucessfully");
     }
-    res.send("file created successfully !!!!");
   });
+
+  res.json(content);
 });
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+
+
+app.get("/", function (req, res) {
+  res.send("Hello! Day-39-Task.Please check <a href='http://localhost:4000/timestamp'>http://localhost:3000/timestamp</a> to view the current timestamp details")
 });
+
+app.listen(port, () => console.log("server started in http://localhost:4000"));
